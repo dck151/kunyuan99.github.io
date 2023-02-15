@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--引入three.js三维引擎-->
+  <script src="http://www.yanhuangxueyuan.com/versions/threejsR92/build/three.js"></script>
+  <script src="http://www.yanhuangxueyuan.com/threejs/examples/js/controls/OrbitControls.js"></script>
+  <title>Document</title>
+</head>
+
+<body>
+  <script type="text/javascript">
+    var canvas = document.createElement("canvas");
+    canvas.width = 512;
+    canvas.height = 128;
+    var c = canvas.getContext('2d');
+    // 矩形区域填充背景
+    c.fillStyle = "#ff00ff";
+    c.fillRect(0, 0, 512, 128);
+    c.beginPath();
+    // 文字
+    c.beginPath();
+    c.translate(256, 64);
+    c.fillStyle = "#000000"; //文本填充颜色
+    c.font = "bold 48px 宋体"; //字体样式设置
+    c.textBaseline = "middle"; //文本与fillText定义的纵坐标
+    c.textAlign = "center"; //文本居中(以fillText定义的横坐标)
+    c.fillText("asddwwasdas", 0, 0);
+
+    /**
+     * 创建场景对象Scene
+     */
+    var scene = new THREE.Scene();
+    var texture = new THREE.CanvasTexture(canvas)
+
+    var geometry = new THREE.PlaneGeometry(128, 32);
+
+    var material = new THREE.MeshPhongMaterial({
+      map: texture,
+    });
+    var mesh = new THREE.Mesh(geometry, material)
+
+    document.body.appendChild(canvas)
+  </script>
+</body>
+
+</html>

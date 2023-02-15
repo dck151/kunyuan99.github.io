@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 返回一个数组
+    function example() {
+      return [1, 2, 3];
+    }
+    let [a, b, c] = example();
+    console.table([a, b, c]);
+    let arr = new Array('a', 'b', 'c');
+    for (let [index, elem] of arr.entries()) {
+      console.log(index, elem);
+    }
+
+    console.log(Object.assign([1, 2, 3], [4, 5]));
+
+    var name = 'window'
+
+    function Person(name) {
+      this.name = name
+      this.foo1 = function () {
+        console.log(this.name)
+      }
+    }
+
+    console.log('--------------------------------------');
+    class Demo {
+      constructor(a, b) {
+        this.a = a;
+        this.b = b;
+        console.log('Demo');
+      }
+      sum() {
+        return this.a + this.b;
+      }
+    }
+    let demo1 = new Demo(2, 1);
+    let demo2 = new Demo(3, 1);
+    // 两者原型链是相等的
+    console.log(demo1._proto_ == demo2._proto_); // true
+
+
+  </script>
+</body>
+
+</html>

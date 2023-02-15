@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="text/javascript" src="js/echarts.min.js"></script>
+  <title>Document</title>
+</head>
+
+<body>
+  <div>
+    <div class="eyeSocket eyeSocketSleeping" id="bigEye">
+      <div id="eyeball"></div>
+    </div>
+  </div>
+
+  <style>
+    body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background-color: #111;
+    }
+
+    .eyeSocket {
+      position: absolute;
+      left: calc(50% - 75px);
+      top: calc(50% - 75px);
+      width: 150px;
+      height: 150px;
+      /* aspect-ratio: 1; 长宽1:1*/
+      border-radius: 50%;
+      border: 4px solid rgb(41, 104, 217);
+      z-index: 1;
+    }
+
+    .eyeSocket::before,
+    .eyeSocket::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      box-sizing: border-box;
+    }
+
+    .eyeSocket::before {
+      width: calc(100% + 20px);
+      height: calc(100% + 20px);
+      border: 6px solid #02ffff;
+    }
+
+    .eyeSocket::after {
+      width: 100%;
+      height: 100%;
+      border: 4px solid rgb(35, 22, 140);
+      box-shadow: inset 0px 0px 30px rgb(35, 22, 140);
+    }
+
+    #eyeball {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ...其他样式 */
+    .eyeSocketSleeping {
+      animation: sleeping 6s infinite;
+    }
+
+    @keyframes sleeping {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.2);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+  </style>
+  <script>
+    // 画眼球
+    let bigEye = document.getElementById('bigEye'); // 获取元素
+
+    let eyeball = document.getElementById('eyeball'); // 获取eyeball元素
+    let eyeballChart = echarts.init(eyeball); // 初始化画布
+    let leftRotSize = 0; // 旋转角度
+    let ballSize = 12; // 眼睛尺寸
+    let rotTimer; // 定时器
+    function getEyeballChart() {
+      eyeballChart.setOption({
+        series: [
+          {
+            startAngle: `${0 + leftRotSize * 5}`, // 加为逆时针旋转，乘5表示速度为leftRotSize的倍
+            endAngle: `${270 + leftRotSize * 5}`, // 即变为每10微秒移动0.5度，1234678同理
+
+            type: 'gauge', // 使用仪表盘类型
+            radius: '-20%', // 采用负数是为了让分割线从内向外延伸
+            clockwise: false,
+            splitNumber: 3, // 分割数量，会将270度分割为3份，所以有四根线
+            detail: false,
+            axisLine: {
+              show: false,
+            },
+            axisTick: false,
+            splitLine: {
+              length: ballSize, // 分割线高度设置为眼球尺寸变量
+            },
+            axisLabel: false
+          },
+          {
+            type: 'gauge',
+            radius: '-20%',
+            clockwise: false,
+            startAngle: `${45 + leftRotSize * 5}`,
+            endAngle: `${315 + leftRotSize * 5}`,
+            splitNumber: 3,
+            detail: false,
+            axisLine: {
+              show: false,
+            },
+            axisTick: false,
+            splitLine: {
+              length: ballSize, // 同上
+            },
+            axisLabel: false
+          }
+        ]
+      })
+    }
+    // 休眠
+    function toSleep() {
+      clearInterval(rotTimer); // 清除定时器
+      rotTimer = setInterval(() => {
+        getEyeballChart()
+        if (ballSize > 0) {
+          ballSize -= 0.1; // 当眼球存在时慢慢减小
+        } else {
+          bigEye.className = 'eyeSocket eyeSocketSleeping'; // 眼球消失后添加呼吸
+        }
+        leftRotSize === 360 ? (leftRotSize = 0) : (leftRotSize += 0.1); // 旋转，
+      }, 10);
+    }
+
+    getEyeballChart();
+    toSleep()
+  </script>
+
+</body>
+
+</html>

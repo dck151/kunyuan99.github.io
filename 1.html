@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vue实现拖拽</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  #app {
+    position: relative;
+    /*定位*/
+    top: 10px;
+    left: 10px;
+    width: 80px;
+    height: 80px;
+    background: #666;
+    /*设置一下背景*/
+  }
+</style>
+
+<body>
+  <div id="app" @mousedown="move">
+    {{positionX}}
+    {{positionY}}
+  </div>
+</body>
+<script>
+  var vm = new Vue({
+    el: "#app",
+    data: {
+      positionX: 0,
+      positionY: 0
+    },
+    methods: {
+      move(e) {
+        let odiv = e.target;// 获取目标元素
+
+        //计算出鼠标相对点击元素的位置,e.clientX获取的是鼠标的位置，OffsetLeft是元素相对于外层元素的位置
+        let x = e.clientX - odiv.offsetLeft;
+        let y = e.clientY - odiv.offsetTop;
+        console.log(odiv.offsetLeft, odiv.offsetTop)
+        document.onmousemove = (e) => {
+          // 获取拖拽元素的位置
+          let left = e.clientX - x;
+          let top = e.clientY - y;
+          this.positionX = left;
+          this.positionY = top;
+          //console.log(document.documentElement.clientHeight,odiv.offsetHeight)
+          // 把拖拽元素 放到 当前的位置
+          if (left <= 0) {
+            left = 0;
+          } else if (left >= document.documentElement.clientWidth - odiv.offsetWidth) {
+            //document.documentElement.clientWidth 屏幕的可视宽度
+            left = document.documentElement.clientWidth - odiv.offsetWidth;
+          }
+
+          if (top <= 0) {
+            top = 0;
+          } else if (top >= document.documentElement.clientHeight - odiv.offsetHeight) {
+            // document.documentElement.clientHeight 屏幕的可视高度
+            top = document.documentElement.clientHeight - odiv.offsetHeight
+
+          }
+          odiv.style.left = left + "px";
+          odiv.style.top = top + "px"
+
+        }
+        // 为了防止 火狐浏览器 拖拽阴影问题
+        document.onmouseup = (e) => {
+          document.onmousemove = null;
+          document.onmouseup = null
+        }
+      }
+    }
+  })
+</script>
+
+</html>
